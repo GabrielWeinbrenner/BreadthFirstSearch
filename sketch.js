@@ -1,12 +1,11 @@
 var data;
 var graph;
 function preload(){
-    data = loadJSON("kevinbacon.json")
+    data = loadJSON("data.json")
 }
 function setup(){
     graph = new Graph();
     noCanvas();
-    console.log(data);
     var movies = data.movies;
 
     for(var i = 0; i< movies.length; i++){
@@ -25,7 +24,7 @@ function setup(){
             movieNode.addEdge(actorNode);
         }
     }
-    var start = this.graph.setStart("Mickey Rourke");
+    var start = this.graph.setStart("Rachel McAdams");
     var end = this.graph.setEnd("Kevin Bacon")
 
     var queue = [];
@@ -35,7 +34,6 @@ function setup(){
     while( queue.length > 0 ){
         var current = queue.shift();
         if(current == end){
-            console.log("Found " + current.value);
             break;
         }
         var edges = current.edges;
@@ -48,5 +46,24 @@ function setup(){
             }
         }
     }
+
+    var path = [];
+
+    path.push(end);
+    var next = end.parent;
+    while(next != null){
+        path.push(next);
+        next = next.parent;
+    }
+    var txt = ''
+    for(var i = path.length - 1; i >= 0; i--){
+        var node = path[i];
+        if(i != 0){
+            txt += node.value + '--->';
+        }else{
+            txt+=node.value;
+        }
+    }
+    createP(txt);
 
 }

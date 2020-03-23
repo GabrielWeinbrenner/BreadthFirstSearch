@@ -25,6 +25,28 @@ function setup(){
             movieNode.addEdge(actorNode);
         }
     }
+    var start = this.graph.setStart("Mickey Rourke");
+    var end = this.graph.setEnd("Kevin Bacon")
 
-    console.log(graph);
+    var queue = [];
+    start.searched = true;
+    queue.push(start) 
+
+    while( queue.length > 0 ){
+        var current = queue.shift();
+        if(current == end){
+            console.log("Found " + current.value);
+            break;
+        }
+        var edges = current.edges;
+        for(var i = 0; i < edges.length; i++ ){
+            var neighbor = edges[i];
+            if(!neighbor.searched){
+                neighbor.searched = true;
+                neighbor.parent = current;
+                queue.push(neighbor);
+            }
+        }
+    }
+
 }

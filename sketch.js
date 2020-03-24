@@ -1,11 +1,20 @@
 var data;
 var graph;
+var actor1;
+var actor2;
+
 function preload(){
     data = loadJSON("data.json")
 }
 function setup(){
+    console.log(data);
     graph = new Graph();
-    noCanvas();
+    actor1 = createInput();
+    actor2 = createInput();
+    button = createButton('submit');
+    button.mousePressed(bfs);
+  
+    noCanvas(); 
     var movies = data.movies;
 
     for(var i = 0; i< movies.length; i++){
@@ -19,17 +28,22 @@ function setup(){
             var actorNode = graph.getNode(actor);
             if(actorNode == undefined){
                 actorNode = new Node(actor);
+
             }
             graph.addNode(actorNode);
             movieNode.addEdge(actorNode);
         }
     }
-    var start = this.graph.setStart("Rachel McAdams");
-    var end = this.graph.setEnd("Kevin Bacon")
+}
+
+function bfs(){
+    graph.reset();
+    var start = graph.setStart(actor1.value());
+    var end = graph.setEnd(actor2.value())
 
     var queue = [];
     start.searched = true;
-    queue.push(start) 
+    queue.push(start);
 
     while( queue.length > 0 ){
         var current = queue.shift();
